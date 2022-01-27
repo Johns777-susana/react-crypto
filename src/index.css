@@ -10,3 +10,9 @@ body {
 .home-crypto-row {
   flex-direction: column !important;
 }
+
+.form-select {
+  width: 90vw !important;
+  max-width: 200px !important;
+  margin: 0 auto;
+}

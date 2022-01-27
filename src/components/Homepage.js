@@ -1,11 +1,48 @@
-import React from 'react';
-import { Container, Row, Col, Button } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Container, Row, Col, Button, Modal, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 // redux
 import { connect } from 'react-redux';
+import { buyMoreCoins } from '../actions/users';
+import { exchangeCoins } from '../actions/users';
 
-const Homepage = ({ users: { coins, isLoading, coinsamount } }) => {
+const Homepage = ({
+  users: { coins, isLoading, coinsamount },
+  buyMoreCoins,
+  exchangeCoins,
+}) => {
+  const [showBuy, setShowBuy] = useState(false);
+  const [showExc, setShowExc] = useState(false);
+
+  const [buyExcData, setBuyExcData] = useState({
+    buyExcId: '',
+    buyExcAmt: '',
+    buyExcTitle: '',
+  });
+  const { buyExcId, buyExcAmt, buyExcTitle } = buyExcData;
+  const exchangeTitle = [
+    { id: 0, title: 'Please select coin' },
+    { id: 1, title: 'Bitcoin' },
+    { id: 2, title: 'Etherum' },
+    { id: 3, title: 'DodgeCoin' },
+    { id: 4, title: 'Binance Coin' },
+    { id: 5, title: 'Tether' },
+    { id: 6, title: 'Solana' },
+    { id: 7, title: 'Cardano' },
+    { id: 8, title: 'Avalanche' },
+    { id: 9, title: 'Shiba Inu' },
+    { id: 10, title: 'Crypto.com' },
+  ];
+
+  const onChange = (e) => {
+    setBuyExcData({ ...buyExcData, buyExcAmt: e.target.value });
+  };
+
+  const onSelect = (e) => {
+    setBuyExcData({ ...buyExcData, buyExcTitle: e.target.value });
+  };
+
   return (
     <>
       <Container>
@@ -60,9 +97,142 @@ const Homepage = ({ users: { coins, isLoading, coinsamount } }) => {
                         alt={title}
                         style={{ height: '50px', width: '50px' }}
                       />
-                      <p className='mb-0'>{amount}</p>
+                      <p className='mb-0'>{amount > 0 && amount}</p>
                     </div>
-                    <Button variant='success'>Exchange</Button>
+                    {amount > 0 ? (
+                      <div style={{ display: 'flex', gap: '1rem' }}>
+                        <Button
+                          variant='success'
+                          onClick={() => {
+                            setShowBuy(true);
+                            setBuyExcData({ ...buyExcData, buyExcId: id });
+                          }}
+                        >
+                          Buy More
+                        </Button>
+                        <Button
+                          variant='info'
+                          onClick={() => {
+                            setShowExc(true);
+                            setBuyExcData({ ...buyExcData, buyExcId: id });
+                          }}
+                        >
+                          Exchange
+                        </Button>
+                      </div>
+                    ) : (
+                      <div
+                        style={{
+                          textAlign: 'center',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.75rem',
+                        }}
+                      >
+                        <p>
+                          No remaning coins. Click to update your coin list.
+                        </p>
+                        <Button>Update</Button>
+                      </div>
+                    )}
+                    {showBuy && (
+                      <Modal
+                        show={showBuy}
+                        onHide={() => setShowBuy(false)}
+                        centered
+                      >
+                        <Row className='pt-4 pb-4 px-4'>
+                          <Form.Group
+                            className='mb-3'
+                            controlId='formBasicEmail'
+                          >
+                            <Form.Control
+                              type='number'
+                              placeholder='Enter amount'
+                              onChange={(e) => onChange(e)}
+                            />
+                          </Form.Group>
+                        </Row>
+                        <Modal.Footer>
+                          <Button
+                            variant='outline-danger'
+                            onClick={() => setShowBuy(false)}
+                          >
+                            Cancel
+                          </Button>
+                          <Button
+                            variant='primary'
+                            onClick={() => {
+                              setShowBuy(false);
+                              buyMoreCoins(buyExcAmt, buyExcId);
+                            }}
+                          >
+                            Buy
+                          </Button>
+                        </Modal.Footer>
+                      </Modal>
+                    )}
+                    {showExc && (
+                      <Modal
+                        show={showExc}
+                        onHide={() => setShowExc(false)}
+                        centered
+                      >
+                        <h4
+                          style={{ textAlign: 'center' }}
+                          className='py-3 mb-0'
+                        >
+                          Exchange {title} with{' '}
+                        </h4>
+                        <Row
+                          className='pt-4 pb-4 px-4'
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '1rem',
+                          }}
+                        >
+                          <Form.Select
+                            aria-label='Default select example'
+                            onChange={(e) => onSelect(e)}
+                          >
+                            {exchangeTitle.map((x) => (
+                              <option key={x.id} value={x.title}>
+                                {x.title}
+                              </option>
+                            ))}
+                          </Form.Select>
+                          <Form.Group
+                            className='mb-3'
+                            controlId='formBasicEmail'
+                          >
+                            <Form.Control
+                              type='number'
+                              placeholder='Enter amount'
+                              onChange={(e) => onChange(e)}
+                              required
+                            />
+                          </Form.Group>
+                        </Row>
+                        <Modal.Footer>
+                          <Button
+                            variant='outline-danger'
+                            onClick={() => setShowExc(false)}
+                          >
+                            Cancel
+                          </Button>
+                          <Button
+                            variant='primary'
+                            onClick={() => {
+                              exchangeCoins(buyExcAmt, buyExcId, buyExcTitle);
+                              setShowExc(false);
+                            }}
+                          >
+                            Exchange
+                          </Button>
+                        </Modal.Footer>
+                      </Modal>
+                    )}
                   </Col>
                 );
               })}
@@ -78,4 +248,7 @@ const mapStateToProps = (state) => ({
   users: state.users,
 });
 
-export default connect(mapStateToProps, {})(Homepage);
+export default connect(mapStateToProps, {
+  buyMoreCoins,
+  exchangeCoins,
+})(Homepage);
