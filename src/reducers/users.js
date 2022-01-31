@@ -3,6 +3,7 @@ import {
   BUY_MORE_COINS,
   EXCHANGE_COINS,
   GET_TOTAL,
+  REMOVE_0_COINS,
 } from '../actions/types';
 import data from '../data';
 
@@ -41,6 +42,7 @@ const users = (state = initialState, action) => {
         .indexOf(payload.title);
 
       if (indexOfReqItem === -1) {
+        // this is if the existing coins do not exist in the array
         const indexOfStateItem = state.coins
           .map((x) => x.id)
           .indexOf(payload.id);
@@ -54,6 +56,7 @@ const users = (state = initialState, action) => {
         const img = data[indexFromData].img;
         const id = data[indexFromData].id;
         payload.id = id;
+        payload.amount = parseInt(payload.amount);
         const addedPayload = { ...payload, img };
 
         return {
@@ -61,8 +64,38 @@ const users = (state = initialState, action) => {
           coins: [...state.coins, addedPayload],
           isLoading: false,
         };
-      }
+      } else {
+        // this is if the exchange coins already exists in the coins array
+        const indexOfStateItem = state.coins
+          .map((x) => x.title)
+          .indexOf(payload.title);
 
+        const reqItemFromState = state.coins[indexOfStateItem];
+
+        reqItemFromState.amount += parseInt(payload.amount);
+
+        const indexOfStateItemFromId = state.coins
+          .map((x) => x.id)
+          .indexOf(payload.id);
+
+        const reqItem = state.coins[indexOfStateItemFromId];
+
+        reqItem.amount -= parseInt(payload.amount);
+
+        return {
+          ...state,
+          isLoading: false,
+        };
+      }
+    case REMOVE_0_COINS:
+      const idIndex = state.coins.map((x) => x.id).indexOf(payload);
+
+      state.coins.splice(idIndex, 1);
+
+      return {
+        ...state,
+        isLoading: false,
+      };
     default:
       return state;
   }

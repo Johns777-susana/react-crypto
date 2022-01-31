@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Button, Modal, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import Alert from './Alert';
 
 // redux
 import { connect } from 'react-redux';
 import { buyMoreCoins } from '../actions/users';
 import { exchangeCoins } from '../actions/users';
+import { updateZeroCoins } from '../actions/users';
 
 const Homepage = ({
   users: { coins, isLoading, coinsamount },
   buyMoreCoins,
   exchangeCoins,
+  updateZeroCoins,
 }) => {
   const [showBuy, setShowBuy] = useState(false);
   const [showExc, setShowExc] = useState(false);
@@ -45,7 +48,8 @@ const Homepage = ({
 
   return (
     <>
-      <Container>
+      <Alert />
+      <Container className='pt-3 pb-3'>
         <Row className='home-row'>
           <Col>
             <h5>Number of cypto coin types.</h5>
@@ -129,10 +133,12 @@ const Homepage = ({
                           gap: '0.75rem',
                         }}
                       >
-                        <p>
+                        <p className='mb-0'>
                           No remaning coins. Click to update your coin list.
                         </p>
-                        <Button>Update</Button>
+                        <Button onClick={() => updateZeroCoins(id)}>
+                          Update
+                        </Button>
                       </div>
                     )}
                     {showBuy && (
@@ -251,4 +257,5 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
   buyMoreCoins,
   exchangeCoins,
+  updateZeroCoins,
 })(Homepage);

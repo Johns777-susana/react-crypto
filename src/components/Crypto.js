@@ -18,7 +18,7 @@ const Crypto = () => {
   };
   return (
     <>
-      <Container>
+      <Container style={{ paddingLeft: '4rem', paddingRight: '4rem' }}>
         {cryptoCoins.map((coin) => {
           const { id, img, title } = coin;
           return (

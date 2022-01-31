@@ -16,3 +16,8 @@ body {
   max-width: 200px !important;
   margin: 0 auto;
 }
+
+.router-link {
+  text-decoration: none;
+  color: #333a43;
+}

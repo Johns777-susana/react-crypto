@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, Row, Button, Form } from 'react-bootstrap';
+import { withRouter } from 'react-router-dom';
 
 // redux
 import { connect } from 'react-redux';
@@ -14,6 +15,7 @@ const Popup = ({
   coinImg,
   addCoins,
   getTotal,
+  history,
 }) => {
   const [amount, setAmount] = useState();
 
@@ -49,7 +51,7 @@ const Popup = ({
           <Button
             variant='primary'
             onClick={() => {
-              addCoins(amount, coinId, coinTitle, coinImg);
+              addCoins(amount, coinId, coinTitle, coinImg, history);
               setShowBuy(false);
               getTotal(amount);
             }}
@@ -62,4 +64,4 @@ const Popup = ({
   );
 };
 
-export default connect(null, { addCoins, getTotal })(Popup);
+export default connect(null, { addCoins, getTotal })(withRouter(Popup));
