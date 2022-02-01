@@ -5,7 +5,6 @@ import { withRouter } from 'react-router-dom';
 // redux
 import { connect } from 'react-redux';
 import { addCoins } from '../actions/users';
-import { getTotal } from '../actions/users';
 
 const Popup = ({
   showBuy,
@@ -14,7 +13,7 @@ const Popup = ({
   coinTitle,
   coinImg,
   addCoins,
-  getTotal,
+
   history,
 }) => {
   const [amount, setAmount] = useState();
@@ -41,7 +40,11 @@ const Popup = ({
               type='number'
               placeholder='Enter amount'
               onChange={(e) => onChange(e)}
+              required
             />
+            <Form.Control.Feedback type='invalid'>
+              Please provide a valid city.
+            </Form.Control.Feedback>
           </Form.Group>
         </Row>
         <Modal.Footer>
@@ -53,7 +56,6 @@ const Popup = ({
             onClick={() => {
               addCoins(amount, coinId, coinTitle, coinImg, history);
               setShowBuy(false);
-              getTotal(amount);
             }}
           >
             Buy
@@ -64,4 +66,4 @@ const Popup = ({
   );
 };
 
-export default connect(null, { addCoins, getTotal })(withRouter(Popup));
+export default connect(null, { addCoins })(withRouter(Popup));

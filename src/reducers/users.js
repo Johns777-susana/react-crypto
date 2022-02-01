@@ -4,6 +4,9 @@ import {
   EXCHANGE_COINS,
   GET_TOTAL,
   REMOVE_0_COINS,
+  ADD_COINS_FAIL,
+  BUY_MORE_COINS_FAIL,
+  EXCHANGE_COINS_FAIL,
 } from '../actions/types';
 import data from '../data';
 
@@ -22,6 +25,7 @@ const users = (state = initialState, action) => {
         coins: [...state.coins, payload],
         isLoading: false,
       };
+
     case BUY_MORE_COINS:
       const index = state.coins.map((x) => x.id).indexOf(payload.id);
 
@@ -94,6 +98,15 @@ const users = (state = initialState, action) => {
 
       return {
         ...state,
+        isLoading: false,
+      };
+    case ADD_COINS_FAIL:
+    case BUY_MORE_COINS_FAIL:
+    case EXCHANGE_COINS_FAIL:
+      return {
+        ...state,
+        coins: [...state.coins],
+        coinsamount: state.coinsamount,
         isLoading: false,
       };
     default:

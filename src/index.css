@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic&display=swap');
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -20,4 +22,28 @@ body {
 .router-link {
   text-decoration: none;
   color: #333a43;
+  letter-spacing: 1.5px;
+  font-size: 1.15rem;
+  text-transform: uppercase;
+  font-family: 'Zen Maru Gothic', sans-serif;
+  transition: 0.3s all ease-in-out;
+}
+
+.router-link:hover {
+  color: #222edf;
+  text-decoration: underline;
+  transition: 0.3s all ease-in-out;
+}
+
+@media only screen and (max-width: 992px) {
+  .navbar-links {
+    padding-top: 0.75rem !important;
+  }
+}
+
+.home-row {
+  text-align: center;
+  padding-top: 1rem;
+  border: 2px solid #33ae43;
+  margin-bottom: 1rem;
 }

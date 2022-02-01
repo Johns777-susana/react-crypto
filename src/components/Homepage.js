@@ -147,35 +147,37 @@ const Homepage = ({
                         onHide={() => setShowBuy(false)}
                         centered
                       >
-                        <Row className='pt-4 pb-4 px-4'>
-                          <Form.Group
-                            className='mb-3'
-                            controlId='formBasicEmail'
-                          >
-                            <Form.Control
-                              type='number'
-                              placeholder='Enter amount'
-                              onChange={(e) => onChange(e)}
-                            />
-                          </Form.Group>
-                        </Row>
-                        <Modal.Footer>
-                          <Button
-                            variant='outline-danger'
-                            onClick={() => setShowBuy(false)}
-                          >
-                            Cancel
-                          </Button>
-                          <Button
-                            variant='primary'
-                            onClick={() => {
-                              setShowBuy(false);
-                              buyMoreCoins(buyExcAmt, buyExcId);
-                            }}
-                          >
-                            Buy
-                          </Button>
-                        </Modal.Footer>
+                        <Form
+                          onSubmit={() => {
+                            setShowBuy(false);
+                            buyMoreCoins(buyExcAmt, buyExcId);
+                          }}
+                        >
+                          <Row className='pt-4 pb-4 px-4'>
+                            <Form.Group
+                              className='mb-3'
+                              controlId='formBasicEmail'
+                            >
+                              <Form.Control
+                                type='number'
+                                placeholder='Enter amount'
+                                onChange={(e) => onChange(e)}
+                                required
+                              />
+                            </Form.Group>
+                          </Row>
+                          <Modal.Footer>
+                            <Button
+                              variant='outline-danger'
+                              onClick={() => setShowBuy(false)}
+                            >
+                              Cancel
+                            </Button>
+                            <Button variant='primary' type='submit'>
+                              Buy
+                            </Button>
+                          </Modal.Footer>
+                        </Form>
                       </Modal>
                     )}
                     {showExc && (
@@ -184,59 +186,61 @@ const Homepage = ({
                         onHide={() => setShowExc(false)}
                         centered
                       >
-                        <h4
-                          style={{ textAlign: 'center' }}
-                          className='py-3 mb-0'
-                        >
-                          Exchange {title} with{' '}
-                        </h4>
-                        <Row
-                          className='pt-4 pb-4 px-4'
-                          style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: '1rem',
+                        <Form
+                          onSubmit={() => {
+                            exchangeCoins(buyExcAmt, buyExcId, buyExcTitle);
+                            setShowExc(false);
                           }}
                         >
-                          <Form.Select
-                            aria-label='Default select example'
-                            onChange={(e) => onSelect(e)}
+                          <h4
+                            style={{ textAlign: 'center' }}
+                            className='py-3 mb-0'
                           >
-                            {exchangeTitle.map((x) => (
-                              <option key={x.id} value={x.title}>
-                                {x.title}
-                              </option>
-                            ))}
-                          </Form.Select>
-                          <Form.Group
-                            className='mb-3'
-                            controlId='formBasicEmail'
-                          >
-                            <Form.Control
-                              type='number'
-                              placeholder='Enter amount'
-                              onChange={(e) => onChange(e)}
-                              required
-                            />
-                          </Form.Group>
-                        </Row>
-                        <Modal.Footer>
-                          <Button
-                            variant='outline-danger'
-                            onClick={() => setShowExc(false)}
-                          >
-                            Cancel
-                          </Button>
-                          <Button
-                            variant='primary'
-                            onClick={() => {
-                              exchangeCoins(buyExcAmt, buyExcId, buyExcTitle);
-                              setShowExc(false);
+                            Exchange {title} with{' '}
+                          </h4>
+                          <Row
+                            className='pt-4 pb-4 px-4'
+                            style={{
+                              display: 'flex',
+                              flexDirection: 'column',
+                              gap: '1rem',
                             }}
                           >
-                            Exchange
-                          </Button>
-                        </Modal.Footer>
+                            <Form.Select
+                              aria-label='Default select example'
+                              onChange={(e) => onSelect(e)}
+                              required
+                            >
+                              {exchangeTitle.map((x) => (
+                                <option key={x.id} value={x.title}>
+                                  {x.title}
+                                </option>
+                              ))}
+                            </Form.Select>
+                            <Form.Group
+                              className='mb-3'
+                              controlId='formBasicEmail'
+                            >
+                              <Form.Control
+                                type='number'
+                                placeholder='Enter amount'
+                                onChange={(e) => onChange(e)}
+                                required
+                              />
+                            </Form.Group>
+                          </Row>
+                          <Modal.Footer>
+                            <Button
+                              variant='outline-danger'
+                              onClick={() => setShowExc(false)}
+                            >
+                              Cancel
+                            </Button>
+                            <Button variant='primary' type='submit'>
+                              Exchange
+                            </Button>
+                          </Modal.Footer>
+                        </Form>
                       </Modal>
                     )}
                   </Col>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import data from '../data';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import Popup from './Popup';
+import Alert from './Alert';
 
 const Crypto = () => {
   const [cryptoCoins, setCryptoCoins] = useState(data);
@@ -18,6 +19,7 @@ const Crypto = () => {
   };
   return (
     <>
+      <Alert />
       <Container style={{ paddingLeft: '4rem', paddingRight: '4rem' }}>
         {cryptoCoins.map((coin) => {
           const { id, img, title } = coin;
